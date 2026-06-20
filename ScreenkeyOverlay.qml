@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Wayland
 import qs.Common
 import qs.Widgets
+import "./dms-common"
 
 PanelWindow {
     id: overlayWindow
@@ -10,6 +11,7 @@ PanelWindow {
     property var daemon: null
     readonly property bool isCentered: daemon ? (daemon.position === "bottom_center" || daemon.position === "top_center") : false
     readonly property bool isMouseClick: daemon ? (daemon.displayText === "LMB Click" || daemon.displayText === "RMB Click" || daemon.displayText === "MMB Click") : false
+    readonly property bool isOverlayVisible: daemon && (daemon.displayText !== "" || (daemon.showModifierStatus && (daemon.ctrlActive || daemon.altActive || daemon.shiftActive || daemon.superActive)))
 
     // Dynamic positioning based on settings (e.g. "bottom_center", "top_left", etc.)
     anchors.bottom: daemon ? daemon.position.includes("bottom") : false
@@ -100,12 +102,12 @@ PanelWindow {
         border.width: 1
 
         // Display with dynamic animations based on settings
-        opacity: (daemon && daemon.displayText !== "") ? (daemon.overlayOpacity / 100.0) : 0.0
-        scale: (daemon && daemon.displayText !== "") ? 1.0 : (daemon && daemon.animationType === "zoom" ? 0.9 : 1.0)
+        opacity: overlayWindow.isOverlayVisible ? (daemon ? daemon.overlayOpacity / 100.0 : 0.9) : 0.0
+        scale: overlayWindow.isOverlayVisible ? 1.0 : (daemon && daemon.animationType === "zoom" ? 0.9 : 1.0)
 
         property real yOffset: {
             if (!daemon || daemon.animationType !== "slide") return 0;
-            const isVisible = daemon.displayText !== "";
+            const isVisible = overlayWindow.isOverlayVisible;
             if (isVisible) return 0;
             const isTop = daemon.position.includes("top");
             return isTop ? -20 : 20;
@@ -172,14 +174,14 @@ PanelWindow {
                                 }
                             }
 
-                            // Render "+" separator unless it is the last item
+                            // Render separator unless it is the last item
                             StyledText {
-                                visible: (index < keysList.length - 1) && (!daemon || !daemon.macSymbols)
+                                visible: index < keysList.length - 1
                                 anchors.verticalCenter: parent.verticalCenter
                                 font.pixelSize: daemon ? daemon.fontSize : 24
                                 font.bold: true
                                 color: Theme.outline
-                                text: "+"
+                                text: daemon ? daemon.customSeparator : "+"
                             }
                         }
                     }
@@ -258,6 +260,100 @@ PanelWindow {
                         
                         height: overlayWindow.unifiedHeight
                         verticalAlignment: Text.AlignVCenter
+                    }
+                }
+            }
+
+            // Divider between history and active modifiers
+            Separator {
+                id: modifierDivider
+                visible: daemon && daemon.showModifierStatus && (daemon.ctrlActive || daemon.altActive || daemon.shiftActive || daemon.superActive) && daemon.historyList.length > 0
+            }
+
+            // Real-time held modifiers status bar
+            Row {
+                id: modifierStatusRow
+                visible: daemon && daemon.showModifierStatus && (daemon.ctrlActive || daemon.altActive || daemon.shiftActive || daemon.superActive)
+                spacing: Theme.spacingS
+                anchors.horizontalCenter: isCentered ? parent.horizontalCenter : undefined
+
+                // Ctrl Pill
+                StyledRect {
+                    visible: daemon && daemon.ctrlActive
+                    height: overlayWindow.unifiedHeight
+                    width: ctrlText.implicitWidth + Theme.spacingM * 2
+                    radius: overlayWindow.roundedKeycaps ? height / 2 : 0
+                    color: Theme.primaryContainer
+                    border.color: Theme.withAlpha(Theme.outline, 0.15)
+                    border.width: 1
+
+                    StyledText {
+                        id: ctrlText
+                        anchors.centerIn: parent
+                        font.pixelSize: daemon ? daemon.fontSize - 4 : 20
+                        font.bold: true
+                        color: Theme.onPrimaryContainer
+                        text: overlayWindow.getOverlayKeyText("Ctrl")
+                    }
+                }
+
+                // Alt Pill
+                StyledRect {
+                    visible: daemon && daemon.altActive
+                    height: overlayWindow.unifiedHeight
+                    width: altText.implicitWidth + Theme.spacingM * 2
+                    radius: overlayWindow.roundedKeycaps ? height / 2 : 0
+                    color: Theme.primaryContainer
+                    border.color: Theme.withAlpha(Theme.outline, 0.15)
+                    border.width: 1
+
+                    StyledText {
+                        id: altText
+                        anchors.centerIn: parent
+                        font.pixelSize: daemon ? daemon.fontSize - 4 : 20
+                        font.bold: true
+                        color: Theme.onPrimaryContainer
+                        text: overlayWindow.getOverlayKeyText("Alt")
+                    }
+                }
+
+                // Shift Pill
+                StyledRect {
+                    visible: daemon && daemon.shiftActive
+                    height: overlayWindow.unifiedHeight
+                    width: shiftText.implicitWidth + Theme.spacingM * 2
+                    radius: overlayWindow.roundedKeycaps ? height / 2 : 0
+                    color: Theme.primaryContainer
+                    border.color: Theme.withAlpha(Theme.outline, 0.15)
+                    border.width: 1
+
+                    StyledText {
+                        id: shiftText
+                        anchors.centerIn: parent
+                        font.pixelSize: daemon ? daemon.fontSize - 4 : 20
+                        font.bold: true
+                        color: Theme.onPrimaryContainer
+                        text: overlayWindow.getOverlayKeyText("Shift")
+                    }
+                }
+
+                // Super Pill
+                StyledRect {
+                    visible: daemon && daemon.superActive
+                    height: overlayWindow.unifiedHeight
+                    width: superText.implicitWidth + Theme.spacingM * 2
+                    radius: overlayWindow.roundedKeycaps ? height / 2 : 0
+                    color: Theme.primaryContainer
+                    border.color: Theme.withAlpha(Theme.outline, 0.15)
+                    border.width: 1
+
+                    StyledText {
+                        id: superText
+                        anchors.centerIn: parent
+                        font.pixelSize: daemon ? daemon.fontSize - 4 : 20
+                        font.bold: true
+                        color: Theme.onPrimaryContainer
+                        text: overlayWindow.getOverlayKeyText("Super")
                     }
                 }
             }

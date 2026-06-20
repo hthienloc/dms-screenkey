@@ -116,7 +116,6 @@ print(json.dumps(devs))
             id: fontSizeSetting
             settingKey: "fontSize"
             label: I18n.tr("Font Size")
-            description: I18n.tr("Size of the text on overlay")
             minimum: 16
             maximum: 64
             defaultValue: 24
@@ -131,7 +130,7 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Layout & Animations")
             icon: "display_settings"
-            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || roundedKeycapsSetting.isDirty || overlayOpacitySetting.isDirty || marginSizeSetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty || historyLimitSetting.isDirty || bgColorSetting.isDirty
+            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || roundedKeycapsSetting.isDirty || overlayOpacitySetting.isDirty || marginSizeSetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty || historyLimitSetting.isDirty || bgColorSetting.isDirty || customSeparatorSetting.isDirty
             onResetClicked: {
                 positionSetting.resetToDefault();
                 animationTypeSetting.resetToDefault();
@@ -143,6 +142,7 @@ print(json.dumps(devs))
                 keycapTextColorSetting.resetToDefault();
                 historyLimitSetting.resetToDefault();
                 bgColorSetting.resetToDefault();
+                customSeparatorSetting.resetToDefault();
             }
         }
 
@@ -182,7 +182,6 @@ print(json.dumps(devs))
             id: roundedKeycapsSetting
             settingKey: "roundedKeycaps"
             label: I18n.tr("Rounded Keycap Corners")
-            description: I18n.tr("Toggle between rounded or sharp square keycap corners")
             defaultValue: true
         }
 
@@ -192,7 +191,6 @@ print(json.dumps(devs))
             id: overlayOpacitySetting
             settingKey: "overlayOpacity"
             label: I18n.tr("Overlay Opacity")
-            description: I18n.tr("Adjust the transparency of the overlay visualizer")
             minimum: 10
             maximum: 100
             defaultValue: 90
@@ -272,6 +270,17 @@ print(json.dumps(devs))
             label: I18n.tr("Overlay Background Color")
             defaultValueMode: "default"
         }
+
+        Separator {}
+
+        StringSettingPlus {
+            id: customSeparatorSetting
+            settingKey: "customSeparator"
+            label: I18n.tr("Custom Separator")
+            description: I18n.tr("Connector character between shortcut keys (e.g. +, -, ➔)")
+            defaultValue: "+"
+            placeholder: "+"
+        }
     }
 
     SettingsCard {
@@ -279,10 +288,11 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Visibility Options")
             icon: "visibility"
-            showReset: showShortcutsSetting.isDirty || macSymbolsSetting.isDirty || showOnlyModifiersSetting.isDirty || ignoreFilterKeysSetting.isDirty || showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
+            showReset: showShortcutsSetting.isDirty || macSymbolsSetting.isDirty || showModifierStatusSetting.isDirty || showOnlyModifiersSetting.isDirty || ignoreFilterKeysSetting.isDirty || showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
             onResetClicked: {
                 showShortcutsSetting.resetToDefault();
                 macSymbolsSetting.resetToDefault();
+                showModifierStatusSetting.resetToDefault();
                 showOnlyModifiersSetting.resetToDefault();
                 ignoreFilterKeysSetting.resetToDefault();
                 showNormalKeysSetting.resetToDefault();
@@ -305,6 +315,16 @@ print(json.dumps(devs))
             settingKey: "macSymbols"
             label: I18n.tr("Use macOS Symbols")
             description: I18n.tr("Toggle to display modifiers and control keys as macOS symbols (e.g. ⌘, ⌥, ⇧, ⌃, ⏎)")
+            defaultValue: false
+        }
+
+        Separator {}
+
+        ToggleSettingPlus {
+            id: showModifierStatusSetting
+            settingKey: "showModifierStatus"
+            label: I18n.tr("Show Held Modifiers")
+            description: I18n.tr("Show a real-time status bar of active modifier keys currently being held down")
             defaultValue: false
         }
 
@@ -344,7 +364,6 @@ print(json.dumps(devs))
             id: showMouseClicksSetting
             settingKey: "showMouseClicks"
             label: I18n.tr("Show Mouse Clicks")
-            description: I18n.tr("Toggle to display mouse click events")
             defaultValue: false
         }
     }

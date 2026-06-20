@@ -34,6 +34,8 @@ PluginComponent {
     readonly property bool showOnlyModifiers: root.pluginData.showOnlyModifiers ?? false
     readonly property bool ignoreFilterKeys: root.pluginData.ignoreFilterKeys ?? true
     readonly property bool macSymbols: root.pluginData.macSymbols ?? false
+    readonly property bool showModifierStatus: root.pluginData.showModifierStatus ?? false
+    readonly property string customSeparator: root.pluginData.customSeparator ?? "+"
     readonly property int historyLimit: root.pluginData.historyLimit ?? 1
     readonly property string bgColorMode: root.pluginData.bgColorMode ?? "default"
     readonly property string bgColorCustom: root.pluginData.bgColorCustom ?? "#1e2326"
@@ -295,6 +297,6 @@ PluginComponent {
     ScreenkeyOverlay {
         id: overlay
         daemon: root
-        visible: root.enabled && root.displayText !== ""
+        visible: root.enabled && overlay.isOverlayVisible
     }
 }
