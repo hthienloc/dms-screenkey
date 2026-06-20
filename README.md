@@ -4,6 +4,18 @@ An always-on-top keystroke and mouse click visualizer for DankMaterialShell (DMS
 
 <img src="screenshot.png" width="400" alt="Screenshot">
 
+## Install
+
+Use the DMS CLI:
+```bash
+dms plugins install screenkey
+```
+
+Or manually:
+```bash
+git clone https://github.com/loccun/dms-screenkey ~/.config/DankMaterialShell/plugins/screenkey
+```
+
 ## Requirements
 
 - `evtest` - For monitoring specific keyboard events.
@@ -13,32 +25,24 @@ An always-on-top keystroke and mouse click visualizer for DankMaterialShell (DMS
 > [!NOTE]
 > On many distros, the libinput CLI is in a separate package: `libinput-tools` (Arch/Debian/Ubuntu) or `libinput-utils` (Fedora). Logout and back in after adding your user to the input group.
 
-## Installation
-
-### Via DMS CLI
-```bash
-dms plugins install screenkey
-```
-
-### Manual Installation
-```bash
-git clone https://github.com/loccun/dms-screenkey ~/.config/DankMaterialShell/plugins/screenkey
-```
-
 ## Features
 
-- **Global Visualizer Overlay** - Displays keyboard keystrokes and mouse clicks on an always-on-top floating screen overlay.
-- **Visual Keycaps** - Automatically renders shortcut key combinations (e.g. `Ctrl + Shift + A`) as individual keycaps with elegant styling.
-- **Vector Mouse Click Indicators** - Highlights clicked mouse buttons (left, right, middle) inside a vector-drawn computer mouse shape alongside a compact text label.
-- **Privacy First** - Defaults to hiding standard letter stream typing to protect passwords and private data, only displaying key combinations.
-- **Customizable Layout** - Configure display position (bottom center, top center, bottom left, etc.), timeout duration, and font scale.
+- **Floating Overlay** - Elegant, always-on-top keystroke and mouse click visualizer.
+- **Visual Keycaps** - Renders key combinations (e.g., `Ctrl + Shift + A`) as styled keycaps.
+- **Mouse Click Indicators** - Shows mouse clicks (left/right/middle) inside a vector-drawn mouse shape.
+- **Privacy Mode** - Default option to only show keyboard shortcuts and hide standard letter typing.
 
 ## Usage
 
+### Control Center Widget
+Toggle the visualizer from the DMS Control Center:
+- **Click widget** - Toggle the visualizer overlay on/off.
+- **Click settings icon** - Open the Screenkey settings page.
+
 ### IPC Commands
-You can control the visualizer daemon using DMS IPC:
+Control the visualizer daemon via terminal:
 ```bash
-# Toggle the visualizer on/off
+# Toggle the visualizer
 dms ipc screenkey toggle
 
 # Enable the visualizer
@@ -49,4 +53,6 @@ dms ipc screenkey disable
 ```
 
 ## License
+
 MIT
+
