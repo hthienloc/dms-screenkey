@@ -159,7 +159,7 @@ PanelWindow {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: keycapText.implicitWidth + Theme.spacingM * 2
                                 height: overlayWindow.unifiedHeight
-                                radius: overlayWindow.roundedKeycaps ? Theme.cornerRadiusSmall : 0
+                                radius: overlayWindow.roundedKeycaps ? Theme.cornerRadius / 2 : 0
                                 color: Theme.surfaceContainerHighest
                                 border.color: Theme.withAlpha(Theme.outline, 0.25)
                                 border.width: 1
