@@ -41,8 +41,14 @@ PanelWindow {
     }
 
     readonly property real unifiedHeight: dummyText.implicitHeight + Theme.spacingXS * 2
-    readonly property color resolvedTextColor: daemon ? (daemon.textColor === "primary" ? Theme.primary : Qt.color(daemon.textColor)) : Theme.primary
-    readonly property color resolvedKeycapTextColor: daemon ? (daemon.keycapTextColor === "primary" ? Theme.primary : Qt.color(daemon.keycapTextColor)) : Theme.primary
+    function resolveColor(mode, custom) {
+        if (mode === "custom") return custom ? Qt.color(custom) : Theme.primary;
+        if (mode === "default") return Theme.primary;
+        return Theme.roleColor(mode);
+    }
+
+    readonly property color resolvedTextColor: daemon ? overlayWindow.resolveColor(daemon.textColorMode, daemon.textColorCustom) : Theme.primary
+    readonly property color resolvedKeycapTextColor: daemon ? overlayWindow.resolveColor(daemon.keycapTextColorMode, daemon.keycapTextColorCustom) : Theme.primary
 
     // Match window size to container size
     implicitWidth: isCentered ? (screen ? screen.width : 1920) : cardContainer.width

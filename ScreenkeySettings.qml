@@ -188,20 +188,20 @@ print(json.dumps(devs))
 
         Separator {}
 
-        ColorSettingPlus {
+        ColorDropdownSettingPlus {
             id: textColorSetting
             settingKey: "textColor"
             label: I18n.tr("Normal Text Color")
-            defaultValue: "primary"
+            defaultValueMode: "default"
         }
 
         Separator {}
 
-        ColorSettingPlus {
+        ColorDropdownSettingPlus {
             id: keycapTextColorSetting
             settingKey: "keycapTextColor"
             label: I18n.tr("Keycap & Mouse Color")
-            defaultValue: "primary"
+            defaultValueMode: "default"
         }
     }
 

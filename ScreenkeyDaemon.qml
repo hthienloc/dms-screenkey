@@ -23,8 +23,10 @@ PluginComponent {
     readonly property bool showMouseClicks: root.pluginData.showMouseClicks ?? false
     readonly property string animationType: root.pluginData.animationType ?? "none"
     readonly property bool showShortcuts: root.pluginData.showShortcuts ?? true
-    readonly property string textColor: root.pluginData.textColor ?? "primary"
-    readonly property string keycapTextColor: root.pluginData.keycapTextColor ?? "primary"
+    readonly property string textColorMode: root.pluginData.textColorMode ?? "default"
+    readonly property string textColorCustom: root.pluginData.textColorCustom ?? "#6750A4"
+    readonly property string keycapTextColorMode: root.pluginData.keycapTextColorMode ?? "default"
+    readonly property string keycapTextColorCustom: root.pluginData.keycapTextColorCustom ?? "#6750A4"
     readonly property int charLimit: root.pluginData.charLimit ?? 20
 
     // Output state
