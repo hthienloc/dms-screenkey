@@ -39,8 +39,8 @@ PanelWindow {
         id: cardContainer
         
         // Match contents with padding
-        width: textLabel.implicitWidth + Theme.spacingXL * 2
-        height: textLabel.implicitHeight + Theme.spacingL * 2
+        width: contentRow.implicitWidth + Theme.spacingXL * 2
+        height: contentRow.implicitHeight + Theme.spacingL * 2
         
         anchors.top: (daemon && daemon.position.includes("top")) ? parent.top : undefined
         anchors.bottom: (daemon && daemon.position.includes("bottom")) ? parent.bottom : undefined
@@ -64,13 +64,61 @@ PanelWindow {
         Behavior on opacity { OpacityAnimator { duration: 150 } }
         Behavior on scale { NumberAnimation { duration: 150; easing.type: Easing.OutBack } }
 
-        StyledText {
-            id: textLabel
+        Row {
+            id: contentRow
             anchors.centerIn: parent
-            font.pixelSize: daemon ? daemon.fontSize : 24
-            font.bold: true
-            color: Theme.primary
-            text: daemon ? daemon.displayText : ""
+            spacing: Theme.spacingS
+
+            readonly property bool isCombo: daemon ? daemon.displayText.includes(" + ") : false
+            readonly property var keysList: isCombo ? daemon.displayText.split(" + ") : []
+
+            // Render keycaps for combinations
+            Repeater {
+                model: contentRow.isCombo ? contentRow.keysList : 0
+                delegate: Row {
+                    spacing: Theme.spacingS
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    StyledRect {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: keycapText.implicitWidth + Theme.spacingM * 2
+                        height: keycapText.implicitHeight + Theme.spacingXS * 2
+                        radius: Theme.cornerRadiusSmall
+                        color: Theme.surfaceContainerHighest
+                        border.color: Theme.withAlpha(Theme.outline, 0.25)
+                        border.width: 1
+
+                        StyledText {
+                            id: keycapText
+                            anchors.centerIn: parent
+                            font.pixelSize: daemon ? daemon.fontSize : 24
+                            font.bold: true
+                            color: Theme.primary
+                            text: modelData
+                        }
+                    }
+
+                    // Render "+" separator unless it is the last item
+                    StyledText {
+                        visible: index < contentRow.keysList.length - 1
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: daemon ? daemon.fontSize : 24
+                        font.bold: true
+                        color: Theme.outline
+                        text: "+"
+                    }
+                }
+            }
+
+            // Render standard text for normal typing
+            StyledText {
+                visible: !contentRow.isCombo
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: daemon ? daemon.fontSize : 24
+                font.bold: true
+                color: Theme.primary
+                text: daemon ? daemon.displayText : ""
+            }
         }
     }
 }
