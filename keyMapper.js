@@ -20,6 +20,9 @@ const KEY_MAP = {
     "KEY_BACKSLASH": "\\",
     "KEY_COMMA": ",", "KEY_DOT": ".", "KEY_SLASH": "/",
     "KEY_CAPSLOCK": "Caps Lock",
+    "KEY_PAGEUP": "PgUp", "KEY_PAGEDOWN": "PgDown",
+    "KEY_INSERT": "Ins", "KEY_DELETE": "Del",
+    "KEY_HOME": "Home", "KEY_END": "End",
     "KEY_F1": "F1", "KEY_F2": "F2", "KEY_F3": "F3", "KEY_F4": "F4",
     "KEY_F5": "F5", "KEY_F6": "F6", "KEY_F7": "F7", "KEY_F8": "F8",
     "KEY_F9": "F9", "KEY_F10": "F10", "KEY_F11": "F11", "KEY_F12": "F12"
