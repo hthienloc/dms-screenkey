@@ -69,12 +69,36 @@ PanelWindow {
         border.color: Theme.withAlpha(Theme.outline, 0.15)
         border.width: 1
 
-        // Display with fade-in and scale animations
+        // Display with dynamic animations based on settings
         opacity: (daemon && daemon.displayText !== "") ? 1.0 : 0.0
-        scale: (daemon && daemon.displayText !== "") ? 1.0 : 0.9
-        
-        Behavior on opacity { OpacityAnimator { duration: 150 } }
-        Behavior on scale { NumberAnimation { duration: 150; easing.type: Easing.OutBack } }
+        scale: (daemon && daemon.displayText !== "") ? 1.0 : (daemon && daemon.animationType === "zoom" ? 0.9 : 1.0)
+
+        property real yOffset: {
+            if (!daemon || daemon.animationType !== "slide") return 0;
+            const isVisible = daemon.displayText !== "";
+            if (isVisible) return 0;
+            const isTop = daemon.position.includes("top");
+            return isTop ? -20 : 20;
+        }
+
+        transform: Translate {
+            y: cardContainer.yOffset
+        }
+
+        Behavior on opacity {
+            enabled: daemon && daemon.animationType !== "none"
+            OpacityAnimator { duration: 150 }
+        }
+
+        Behavior on scale {
+            enabled: daemon && daemon.animationType === "zoom"
+            NumberAnimation { duration: 150; easing.type: Easing.OutBack }
+        }
+
+        Behavior on yOffset {
+            enabled: daemon && daemon.animationType === "slide"
+            NumberAnimation { duration: 150; easing.type: Easing.OutCubic }
+        }
 
         Row {
             id: contentRow

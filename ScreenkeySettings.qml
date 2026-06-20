@@ -127,15 +127,14 @@ print(json.dumps(devs))
     }
 
     SettingsCard {
-        id: appearanceSection
+        id: layoutSection
         SectionTitle {
-            text: I18n.tr("Layout & Behavior")
+            text: I18n.tr("Layout & Animations")
             icon: "display_settings"
-            showReset: positionSetting.isDirty || showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
+            showReset: positionSetting.isDirty || animationTypeSetting.isDirty
             onResetClicked: {
                 positionSetting.resetToDefault();
-                showNormalKeysSetting.resetToDefault();
-                showMouseClicksSetting.resetToDefault();
+                animationTypeSetting.resetToDefault();
             }
         }
 
@@ -155,6 +154,32 @@ print(json.dumps(devs))
         }
 
         Separator {}
+
+        SelectionSettingPlus {
+            id: animationTypeSetting
+            settingKey: "animationType"
+            label: I18n.tr("Animation Style")
+            options: [
+                { label: I18n.tr("Zoom"), value: "zoom" },
+                { label: I18n.tr("Fade Only"), value: "fade" },
+                { label: I18n.tr("Slide"), value: "slide" },
+                { label: I18n.tr("None"), value: "none" }
+            ]
+            defaultValue: "none"
+        }
+    }
+
+    SettingsCard {
+        id: visibilitySection
+        SectionTitle {
+            text: I18n.tr("Visibility Options")
+            icon: "visibility"
+            showReset: showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
+            onResetClicked: {
+                showNormalKeysSetting.resetToDefault();
+                showMouseClicksSetting.resetToDefault();
+            }
+        }
 
         ToggleSettingPlus {
             id: showNormalKeysSetting

@@ -21,6 +21,7 @@ PluginComponent {
     readonly property string position: root.pluginData.position ?? "bottom_center"
     readonly property string selectedDevicePath: root.pluginData.selectedDevicePath ?? "all"
     readonly property bool showMouseClicks: root.pluginData.showMouseClicks ?? false
+    readonly property string animationType: root.pluginData.animationType ?? "none"
 
     // Output state
     property string displayText: ""
