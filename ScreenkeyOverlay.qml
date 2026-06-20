@@ -130,8 +130,8 @@ PanelWindow {
                 color: Theme.primary
                 text: daemon ? daemon.displayText : ""
                 
-                // Force implicit height matching keycaps to avoid container height jump
-                implicitHeight: overlayWindow.unifiedHeight
+                // Force height matching keycaps to avoid container height jump
+                height: overlayWindow.unifiedHeight
                 verticalAlignment: Text.AlignVCenter
             }
         }
