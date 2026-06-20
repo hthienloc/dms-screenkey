@@ -33,6 +33,10 @@ PluginComponent {
     readonly property int marginSize: root.pluginData.marginSize ?? 24
     readonly property bool showOnlyModifiers: root.pluginData.showOnlyModifiers ?? false
     readonly property bool ignoreFilterKeys: root.pluginData.ignoreFilterKeys ?? true
+    readonly property int historyLimit: root.pluginData.historyLimit ?? 1
+    readonly property string bgColorMode: root.pluginData.bgColorMode ?? "default"
+    readonly property string bgColorCustom: root.pluginData.bgColorCustom ?? "#1e2326"
+    property var historyList: []
 
     // Output state
     property string displayText: ""
@@ -71,6 +75,7 @@ PluginComponent {
         onTriggered: {
             root.displayText = "";
             root.textBuffer = "";
+            root.historyList = [];
         }
     }
 
@@ -108,12 +113,32 @@ PluginComponent {
         return combo.join(" + ");
     }
 
+    function addKeystroke(text, isCombo) {
+        fadeTimer.stop();
+        let newList = root.historyList.slice();
+        if (root.historyLimit === 1) {
+            newList = [{ text: text, isCombo: isCombo, id: Date.now() }];
+        } else {
+            const lastItem = newList.length > 0 ? newList[newList.length - 1] : null;
+            if (lastItem && !lastItem.isCombo && !isCombo) {
+                lastItem.text = text;
+                lastItem.id = Date.now();
+            } else {
+                newList.push({ text: text, isCombo: isCombo, id: Date.now() });
+                if (newList.length > root.historyLimit) {
+                    newList.shift();
+                }
+            }
+        }
+        root.historyList = newList;
+        root.displayText = "has_content";
+        fadeTimer.start();
+    }
+
     function updateModifierDisplay() {
         if (root.showOnlyModifiers) {
-            fadeTimer.stop();
             root.textBuffer = "";
-            root.displayText = getActiveModifiersString();
-            fadeTimer.start();
+            root.addKeystroke(getActiveModifiersString(), true);
         }
     }
 
@@ -152,7 +177,6 @@ PluginComponent {
         const hasModifiers = root.ctrlActive || root.altActive || root.superActive;
         if (hasModifiers) {
             if (root.showShortcuts) {
-                fadeTimer.stop();
                 let combo = [];
                 if (root.ctrlActive) combo.push("Ctrl");
                 if (root.altActive) combo.push("Alt");
@@ -161,8 +185,7 @@ PluginComponent {
                 combo.push(KeyMapper.getDisplayKey(keyName));
 
                 root.textBuffer = ""; // Reset standard typing buffer
-                root.displayText = combo.join(" + ");
-                fadeTimer.start();
+                root.addKeystroke(combo.join(" + "), true);
             }
             return;
         }
@@ -171,36 +194,30 @@ PluginComponent {
         if (root.showNormalKeys) {
             const keyChar = KeyMapper.getChar(keyName, root.shiftActive);
             if (keyChar !== "") {
-                fadeTimer.stop();
                 root.textBuffer += keyChar;
                 if (root.textBuffer.length > root.charLimit) {
                     root.textBuffer = root.textBuffer.slice(-root.charLimit);
                 }
-                root.displayText = root.textBuffer;
-                fadeTimer.start();
+                root.addKeystroke(root.textBuffer, false);
                 return;
             }
 
             // Handles backspace deletion
             if (keyName === "KEY_BACKSPACE") {
-                fadeTimer.stop();
                 if (root.textBuffer.length > 0) {
                     root.textBuffer = root.textBuffer.slice(0, -1);
-                    root.displayText = root.textBuffer;
+                    root.addKeystroke(root.textBuffer, false);
                 } else {
-                    root.displayText = "Backspace";
+                    root.addKeystroke("Backspace", false);
                 }
-                fadeTimer.start();
                 return;
             }
 
             // Treat other control keys as standalone items
             const label = KeyMapper.getDisplayKey(keyName);
             if (label !== "") {
-                fadeTimer.stop();
                 root.textBuffer = ""; // Reset buffer
-                root.displayText = label;
-                fadeTimer.start();
+                root.addKeystroke(label, false);
             }
         }
     }
@@ -219,10 +236,8 @@ PluginComponent {
 
     function handleMouseClick(buttonName) {
         if (!root.enabled || !root.showMouseClicks) return;
-        fadeTimer.stop();
         root.textBuffer = "";
-        root.displayText = buttonName;
-        fadeTimer.start();
+        root.addKeystroke(buttonName, false);
     }
 
     // Input monitoring process

@@ -131,7 +131,7 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Layout & Animations")
             icon: "display_settings"
-            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || roundedKeycapsSetting.isDirty || overlayOpacitySetting.isDirty || marginSizeSetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty
+            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || roundedKeycapsSetting.isDirty || overlayOpacitySetting.isDirty || marginSizeSetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty || historyLimitSetting.isDirty || bgColorSetting.isDirty
             onResetClicked: {
                 positionSetting.resetToDefault();
                 animationTypeSetting.resetToDefault();
@@ -141,6 +141,8 @@ print(json.dumps(devs))
                 charLimitSetting.resetToDefault();
                 textColorSetting.resetToDefault();
                 keycapTextColorSetting.resetToDefault();
+                historyLimitSetting.resetToDefault();
+                bgColorSetting.resetToDefault();
             }
         }
 
@@ -231,6 +233,21 @@ print(json.dumps(devs))
 
         Separator {}
 
+        SliderSettingPlus {
+            id: historyLimitSetting
+            settingKey: "historyLimit"
+            label: I18n.tr("Keystroke History Limit")
+            description: I18n.tr("Number of lines to display for keystroke history")
+            minimum: 1
+            maximum: 5
+            defaultValue: 1
+            unit: "lines"
+            leftLabel: "1"
+            rightLabel: "5"
+        }
+
+        Separator {}
+
         ColorDropdownSettingPlus {
             id: textColorSetting
             settingKey: "textColor"
@@ -244,6 +261,15 @@ print(json.dumps(devs))
             id: keycapTextColorSetting
             settingKey: "keycapTextColor"
             label: I18n.tr("Keycap & Mouse Color")
+            defaultValueMode: "default"
+        }
+
+        Separator {}
+
+        ColorDropdownSettingPlus {
+            id: bgColorSetting
+            settingKey: "bgColor"
+            label: I18n.tr("Overlay Background Color")
             defaultValueMode: "default"
         }
     }

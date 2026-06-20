@@ -49,6 +49,12 @@ PanelWindow {
     readonly property color resolvedTextColor: daemon ? overlayWindow.resolveColor(daemon.textColorMode, daemon.textColorCustom) : Theme.primary
     readonly property color resolvedKeycapTextColor: daemon ? overlayWindow.resolveColor(daemon.keycapTextColorMode, daemon.keycapTextColorCustom) : Theme.primary
     readonly property bool roundedKeycaps: daemon ? daemon.roundedKeycaps : true
+    readonly property color resolvedBgColor: {
+        if (!daemon) return Theme.withAlpha(Theme.surface, 0.85);
+        if (daemon.bgColorMode === "default") return Theme.withAlpha(Theme.surface, 0.85);
+        if (daemon.bgColorMode === "custom") return Qt.color(daemon.bgColorCustom);
+        return Theme.roleColor(daemon.bgColorMode);
+    }
 
     // Match window size to container size
     implicitWidth: isCentered ? (screen ? screen.width : 1920) : cardContainer.width
@@ -59,8 +65,8 @@ PanelWindow {
         id: cardContainer
         
         // Match contents with padding
-        width: contentRow.implicitWidth + Theme.spacingXL * 2
-        height: contentRow.implicitHeight + Theme.spacingL * 2
+        width: contentColumn.implicitWidth + Theme.spacingXL * 2
+        height: contentColumn.implicitHeight + Theme.spacingL * 2
         
         anchors.top: (daemon && daemon.position.includes("top")) ? parent.top : undefined
         anchors.bottom: (daemon && daemon.position.includes("bottom")) ? parent.bottom : undefined
@@ -73,7 +79,7 @@ PanelWindow {
         Behavior on height { NumberAnimation { duration: 100 } }
 
         radius: Theme.cornerRadius
-        color: Theme.withAlpha(Theme.surface, 0.85) // Elegant glassmorphism
+        color: overlayWindow.resolvedBgColor
         border.color: Theme.withAlpha(Theme.outline, 0.15)
         border.width: 1
 
@@ -108,130 +114,136 @@ PanelWindow {
             NumberAnimation { duration: 150; easing.type: Easing.OutCubic }
         }
 
-        Row {
-            id: contentRow
+        Column {
+            id: contentColumn
             anchors.centerIn: parent
             spacing: Theme.spacingS
 
-            readonly property bool isCombo: daemon ? daemon.displayText.includes(" + ") : false
-            readonly property var keysList: isCombo ? daemon.displayText.split(" + ") : []
-
-            // Render keycaps for combinations
             Repeater {
-                model: contentRow.isCombo ? contentRow.keysList : 0
+                model: daemon ? daemon.historyList : []
                 delegate: Row {
                     spacing: Theme.spacingS
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: isCentered ? parent.horizontalCenter : undefined
 
-                    StyledRect {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: keycapText.implicitWidth + Theme.spacingM * 2
-                        height: overlayWindow.unifiedHeight
-                        radius: overlayWindow.roundedKeycaps ? Theme.cornerRadiusSmall : 0
-                        color: Theme.surfaceContainerHighest
-                        border.color: Theme.withAlpha(Theme.outline, 0.25)
-                        border.width: 1
+                    readonly property string lineText: modelData.text
+                    readonly property bool isCombo: modelData.isCombo
+                    readonly property bool isMouseClick: lineText === "LMB Click" || lineText === "RMB Click" || lineText === "MMB Click"
+                    readonly property var keysList: isCombo ? lineText.split(" + ") : []
 
-                        StyledText {
-                            id: keycapText
-                            anchors.centerIn: parent
-                            font.pixelSize: daemon ? daemon.fontSize : 24
-                            font.bold: true
-                            color: overlayWindow.resolvedKeycapTextColor
-                            text: modelData
+                    // Render keycaps for combinations
+                    Repeater {
+                        model: isCombo ? keysList : 0
+                        delegate: Row {
+                            spacing: Theme.spacingS
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            StyledRect {
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: keycapText.implicitWidth + Theme.spacingM * 2
+                                height: overlayWindow.unifiedHeight
+                                radius: overlayWindow.roundedKeycaps ? Theme.cornerRadiusSmall : 0
+                                color: Theme.surfaceContainerHighest
+                                border.color: Theme.withAlpha(Theme.outline, 0.25)
+                                border.width: 1
+
+                                StyledText {
+                                    id: keycapText
+                                    anchors.centerIn: parent
+                                    font.pixelSize: daemon ? daemon.fontSize : 24
+                                    font.bold: true
+                                    color: overlayWindow.resolvedKeycapTextColor
+                                    text: modelData
+                                }
+                            }
+
+                            // Render "+" separator unless it is the last item
+                            StyledText {
+                                visible: index < keysList.length - 1
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pixelSize: daemon ? daemon.fontSize : 24
+                                font.bold: true
+                                color: Theme.outline
+                                text: "+"
+                            }
                         }
                     }
 
-                    // Render "+" separator unless it is the last item
+                    // Render mouse click indicator
+                    Row {
+                        id: mouseIcon
+                        visible: isMouseClick
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: Theme.spacingS
+                        height: overlayWindow.unifiedHeight
+
+                        readonly property bool isLeft: lineText === "LMB Click"
+                        readonly property bool isRight: lineText === "RMB Click"
+                        readonly property bool isMiddle: lineText === "MMB Click"
+
+                        Rectangle {
+                            width: 14
+                            height: 22
+                            radius: 7
+                            color: "transparent"
+                            border.color: Theme.outline
+                            border.width: 1.5
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            Rectangle {
+                                width: 7
+                                height: 11
+                                radius: 3
+                                color: mouseIcon.isLeft ? Theme.primary : "transparent"
+                                border.color: Theme.outline
+                                border.width: 1
+                                anchors.left: parent.left
+                                anchors.top: parent.top
+                            }
+
+                            Rectangle {
+                                width: 7
+                                height: 11
+                                radius: 3
+                                color: mouseIcon.isRight ? Theme.primary : "transparent"
+                                border.color: Theme.outline
+                                border.width: 1
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                            }
+
+                            Rectangle {
+                                width: 2
+                                height: 5
+                                radius: 1
+                                color: mouseIcon.isMiddle ? Theme.primary : Theme.outline
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.top: parent.top
+                                anchors.topMargin: 3
+                            }
+                        }
+
+                        StyledText {
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: daemon ? daemon.fontSize : 24
+                            font.bold: true
+                            color: overlayWindow.resolvedKeycapTextColor
+                            text: mouseIcon.isLeft ? "L" : (mouseIcon.isRight ? "R" : "M")
+                        }
+                    }
+
+                    // Render standard text for normal typing
                     StyledText {
-                        visible: index < contentRow.keysList.length - 1
+                        visible: !isCombo && !isMouseClick
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: daemon ? daemon.fontSize : 24
                         font.bold: true
-                        color: Theme.outline
-                        text: "+"
+                        color: overlayWindow.resolvedTextColor
+                        text: lineText
+                        
+                        height: overlayWindow.unifiedHeight
+                        verticalAlignment: Text.AlignVCenter
                     }
                 }
-            }
-
-            // Render mouse click indicator
-            Row {
-                id: mouseIcon
-                visible: overlayWindow.isMouseClick
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: Theme.spacingS
-                height: overlayWindow.unifiedHeight
-
-                readonly property bool isLeft: daemon ? daemon.displayText === "LMB Click" : false
-                readonly property bool isRight: daemon ? daemon.displayText === "RMB Click" : false
-                readonly property bool isMiddle: daemon ? daemon.displayText === "MMB Click" : false
-
-                Rectangle {
-                    width: 14
-                    height: 22
-                    radius: 7
-                    color: "transparent"
-                    border.color: Theme.outline
-                    border.width: 1.5
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    // Left click indicator
-                    Rectangle {
-                        width: 7
-                        height: 11
-                        radius: 3
-                        color: mouseIcon.isLeft ? Theme.primary : "transparent"
-                        border.color: Theme.outline
-                        border.width: 1
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                    }
-
-                    // Right click indicator
-                    Rectangle {
-                        width: 7
-                        height: 11
-                        radius: 3
-                        color: mouseIcon.isRight ? Theme.primary : "transparent"
-                        border.color: Theme.outline
-                        border.width: 1
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                    }
-
-                    // Scroll wheel (middle button)
-                    Rectangle {
-                        width: 2
-                        height: 5
-                        radius: 1
-                        color: mouseIcon.isMiddle ? Theme.primary : Theme.outline
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.top: parent.top
-                        anchors.topMargin: 3
-                    }
-                }
-
-                StyledText {
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: daemon ? daemon.fontSize : 24
-                    font.bold: true
-                    color: overlayWindow.resolvedKeycapTextColor
-                    text: mouseIcon.isLeft ? "L" : (mouseIcon.isRight ? "R" : "M")
-                }
-            }
-
-            // Render standard text for normal typing
-            StyledText {
-                visible: !contentRow.isCombo && !overlayWindow.isMouseClick
-                anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: daemon ? daemon.fontSize : 24
-                font.bold: true
-                color: overlayWindow.resolvedTextColor
-                text: daemon ? daemon.displayText : ""
-                
-                // Force height matching keycaps to avoid container height jump
-                height: overlayWindow.unifiedHeight
-                verticalAlignment: Text.AlignVCenter
             }
         }
     }
