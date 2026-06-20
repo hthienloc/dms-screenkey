@@ -4,12 +4,15 @@
     "description": "Displays keystrokes on screen in a readable format for tutorials",
     "version": "1.0.1",
     "author": "Loc Huynh",
-    "type": "widget",
-    "icon": "keyboard",
+    "type": "composite",
     "capabilities": [
+        "daemon",
         "control-center"
     ],
-    "component": "./ScreenkeyWidget.qml",
+    "components": {
+        "daemon": "./ScreenkeyDaemon.qml",
+        "widget": "./ScreenkeyWidget.qml"
+    },
     "settings": "./ScreenkeySettings.qml",
     "requires_dms": ">=1.5.0",
     "permissions": [

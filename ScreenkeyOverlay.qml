@@ -19,6 +19,8 @@ PanelWindow {
     // Wayland specific window properties
     WlrLayershell.layer: WlrLayershell.Overlay
     WlrLayershell.keyboardFocus: WlrLayershell.None // Absolutely critical: do not steal focus
+    WlrLayershell.exclusiveZone: -1
+    exclusionMode: ExclusionMode.Ignore
 
     // Add safety margins from screen edges
     WlrLayershell.margins {
