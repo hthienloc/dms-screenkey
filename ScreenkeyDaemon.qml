@@ -108,11 +108,10 @@ PluginComponent {
             return;
         }
 
-        fadeTimer.stop();
-
         // 2. Active modifiers combo logic
         const hasModifiers = root.ctrlActive || root.altActive || root.superActive;
         if (hasModifiers) {
+            fadeTimer.stop();
             let combo = [];
             if (root.ctrlActive) combo.push("Ctrl");
             if (root.altActive) combo.push("Alt");
@@ -130,6 +129,7 @@ PluginComponent {
         if (root.showNormalKeys) {
             const keyChar = KeyMapper.getChar(keyName, root.shiftActive);
             if (keyChar !== "") {
+                fadeTimer.stop();
                 root.textBuffer += keyChar;
                 root.displayText = root.textBuffer;
                 fadeTimer.start();
@@ -138,6 +138,7 @@ PluginComponent {
 
             // Handles backspace deletion
             if (keyName === "KEY_BACKSPACE") {
+                fadeTimer.stop();
                 if (root.textBuffer.length > 0) {
                     root.textBuffer = root.textBuffer.slice(0, -1);
                     root.displayText = root.textBuffer;
@@ -151,6 +152,7 @@ PluginComponent {
             // Treat other control keys as standalone items
             const label = KeyMapper.getDisplayKey(keyName);
             if (label !== "") {
+                fadeTimer.stop();
                 root.textBuffer = ""; // Reset buffer
                 root.displayText = label;
                 fadeTimer.start();
