@@ -2,7 +2,7 @@
     "id": "screenkey",
     "name": "Keystroke Visualizer",
     "description": "Displays keystrokes on screen in a readable format for tutorials",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Loc Huynh",
     "type": "widget",
     "icon": "keyboard",
