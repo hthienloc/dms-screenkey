@@ -18,6 +18,7 @@ git clone https://github.com/loccun/dms-screenkey ~/.config/DankMaterialShell/pl
 
 ## Requirements
 
+- **DankMaterialShell** `>= 1.5.0`
 - `evtest` - For monitoring specific keyboard events.
 - `libinput` **CLI** - For **"All Keyboards"** mode.
 - **Input group** - User must be in the `input` group: `sudo usermod -aG input $USER`.
