@@ -58,8 +58,9 @@ dms ipc screenkey disable
 - [x] **Always-on-top Overlay** - Wayland layer-shell floating overlay.
 - [x] **Dynamic Device Scanner** - Scans active keyboards automatically via helper script.
 - [x] **Vector Mouse Indicators** - Custom QML-drawn mouse with highlighted left, middle, and right buttons.
-- [ ] **Multi-line History** - Display a history of the last few shortcuts on screen.
-- [ ] **Custom Styling** - Add settings to customize keycap colors, border radius, and font family.
+- [x] **Multi-line History** - Display a history of the last few shortcuts on screen.
+- [x] **Custom Styling** - Custom colors, border radius, custom connector separator, and macOS symbols.
+- [x] **Held Modifiers Status Bar** - Displays held modifier keys in real-time.
 - [ ] **Click Ripple Animation** - Render a visual wave/ripple effect at the cursor coordinates.
 
 ## License
