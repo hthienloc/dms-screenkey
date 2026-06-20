@@ -161,7 +161,7 @@ print(json.dumps(devs))
             settingKey: "showNormalKeys"
             label: I18n.tr("Show Normal Keystrokes")
             description: I18n.tr("Toggle to display normal letters instead of just modifier shortcuts")
-            defaultValue: true
+            defaultValue: false
         }
 
         Separator {}

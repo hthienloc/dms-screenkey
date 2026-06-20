@@ -16,7 +16,7 @@ PluginComponent {
     // Configurable settings
     readonly property bool enabled: root.pluginData.enabled ?? true
     readonly property int fadeTimeout: root.pluginData.fadeTimeout ?? 1500
-    readonly property bool showNormalKeys: root.pluginData.showNormalKeys ?? true
+    readonly property bool showNormalKeys: root.pluginData.showNormalKeys ?? false
     readonly property int fontSize: root.pluginData.fontSize ?? 24
     readonly property string position: root.pluginData.position ?? "bottom_center"
     readonly property string selectedDevicePath: root.pluginData.selectedDevicePath ?? "all"
