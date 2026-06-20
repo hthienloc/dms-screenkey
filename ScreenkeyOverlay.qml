@@ -46,6 +46,22 @@ PanelWindow {
         return Theme.roleColor(mode);
     }
 
+    function getOverlayKeyText(keyText) {
+        if (!daemon || !daemon.macSymbols) return keyText;
+        const macMap = {
+            "Ctrl": "⌃",
+            "Alt": "⌥",
+            "Shift": "⇧",
+            "Super": "⌘",
+            "Enter": "⏎",
+            "Backspace": "⌫",
+            "Tab": "⇥",
+            "Esc": "⎋",
+            "Space": "␣"
+        };
+        return macMap[keyText] || keyText;
+    }
+
     readonly property color resolvedTextColor: daemon ? overlayWindow.resolveColor(daemon.textColorMode, daemon.textColorCustom) : Theme.primary
     readonly property color resolvedKeycapTextColor: daemon ? overlayWindow.resolveColor(daemon.keycapTextColorMode, daemon.keycapTextColorCustom) : Theme.primary
     readonly property bool roundedKeycaps: daemon ? daemon.roundedKeycaps : true
@@ -122,7 +138,7 @@ PanelWindow {
             Repeater {
                 model: daemon ? daemon.historyList : []
                 delegate: Row {
-                    spacing: Theme.spacingS
+                    spacing: (daemon && daemon.macSymbols) ? Theme.spacingXS : Theme.spacingS
                     anchors.horizontalCenter: isCentered ? parent.horizontalCenter : undefined
 
                     readonly property string lineText: modelData.text
@@ -134,7 +150,7 @@ PanelWindow {
                     Repeater {
                         model: isCombo ? keysList : 0
                         delegate: Row {
-                            spacing: Theme.spacingS
+                            spacing: (daemon && daemon.macSymbols) ? Theme.spacingXS : Theme.spacingS
                             anchors.verticalCenter: parent.verticalCenter
 
                             StyledRect {
@@ -152,13 +168,13 @@ PanelWindow {
                                     font.pixelSize: daemon ? daemon.fontSize : 24
                                     font.bold: true
                                     color: overlayWindow.resolvedKeycapTextColor
-                                    text: modelData
+                                    text: overlayWindow.getOverlayKeyText(modelData)
                                 }
                             }
 
                             // Render "+" separator unless it is the last item
                             StyledText {
-                                visible: index < keysList.length - 1
+                                visible: (index < keysList.length - 1) && (!daemon || !daemon.macSymbols)
                                 anchors.verticalCenter: parent.verticalCenter
                                 font.pixelSize: daemon ? daemon.fontSize : 24
                                 font.bold: true
@@ -238,7 +254,7 @@ PanelWindow {
                         font.pixelSize: daemon ? daemon.fontSize : 24
                         font.bold: true
                         color: overlayWindow.resolvedTextColor
-                        text: lineText
+                        text: overlayWindow.getOverlayKeyText(lineText)
                         
                         height: overlayWindow.unifiedHeight
                         verticalAlignment: Text.AlignVCenter

@@ -279,9 +279,10 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Visibility Options")
             icon: "visibility"
-            showReset: showShortcutsSetting.isDirty || showOnlyModifiersSetting.isDirty || ignoreFilterKeysSetting.isDirty || showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
+            showReset: showShortcutsSetting.isDirty || macSymbolsSetting.isDirty || showOnlyModifiersSetting.isDirty || ignoreFilterKeysSetting.isDirty || showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
             onResetClicked: {
                 showShortcutsSetting.resetToDefault();
+                macSymbolsSetting.resetToDefault();
                 showOnlyModifiersSetting.resetToDefault();
                 ignoreFilterKeysSetting.resetToDefault();
                 showNormalKeysSetting.resetToDefault();
@@ -295,6 +296,16 @@ print(json.dumps(devs))
             label: I18n.tr("Show Key Combinations")
             description: I18n.tr("Toggle to display modifier shortcuts (e.g., Ctrl + Alt + T)")
             defaultValue: true
+        }
+
+        Separator {}
+
+        ToggleSettingPlus {
+            id: macSymbolsSetting
+            settingKey: "macSymbols"
+            label: I18n.tr("Use macOS Symbols")
+            description: I18n.tr("Toggle to display modifiers and control keys as macOS symbols (e.g. ⌘, ⌥, ⇧, ⌃, ⏎)")
+            defaultValue: false
         }
 
         Separator {}

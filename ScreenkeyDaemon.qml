@@ -33,6 +33,7 @@ PluginComponent {
     readonly property int marginSize: root.pluginData.marginSize ?? 24
     readonly property bool showOnlyModifiers: root.pluginData.showOnlyModifiers ?? false
     readonly property bool ignoreFilterKeys: root.pluginData.ignoreFilterKeys ?? true
+    readonly property bool macSymbols: root.pluginData.macSymbols ?? false
     readonly property int historyLimit: root.pluginData.historyLimit ?? 1
     readonly property string bgColorMode: root.pluginData.bgColorMode ?? "default"
     readonly property string bgColorCustom: root.pluginData.bgColorCustom ?? "#1e2326"
