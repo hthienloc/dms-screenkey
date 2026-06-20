@@ -131,10 +131,11 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Layout & Animations")
             icon: "display_settings"
-            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty
+            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || roundedKeycapsSetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty
             onResetClicked: {
                 positionSetting.resetToDefault();
                 animationTypeSetting.resetToDefault();
+                roundedKeycapsSetting.resetToDefault();
                 charLimitSetting.resetToDefault();
                 textColorSetting.resetToDefault();
                 keycapTextColorSetting.resetToDefault();
@@ -169,6 +170,16 @@ print(json.dumps(devs))
                 { label: I18n.tr("None"), value: "none" }
             ]
             defaultValue: "none"
+        }
+
+        Separator {}
+
+        ToggleSettingPlus {
+            id: roundedKeycapsSetting
+            settingKey: "roundedKeycaps"
+            label: I18n.tr("Rounded Keycap Corners")
+            description: I18n.tr("Toggle between rounded or sharp square keycap corners")
+            defaultValue: true
         }
 
         Separator {}

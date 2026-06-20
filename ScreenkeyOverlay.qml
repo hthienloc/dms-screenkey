@@ -49,6 +49,7 @@ PanelWindow {
 
     readonly property color resolvedTextColor: daemon ? overlayWindow.resolveColor(daemon.textColorMode, daemon.textColorCustom) : Theme.primary
     readonly property color resolvedKeycapTextColor: daemon ? overlayWindow.resolveColor(daemon.keycapTextColorMode, daemon.keycapTextColorCustom) : Theme.primary
+    readonly property bool roundedKeycaps: daemon ? daemon.roundedKeycaps : true
 
     // Match window size to container size
     implicitWidth: isCentered ? (screen ? screen.width : 1920) : cardContainer.width
@@ -127,7 +128,7 @@ PanelWindow {
                         anchors.verticalCenter: parent.verticalCenter
                         width: keycapText.implicitWidth + Theme.spacingM * 2
                         height: overlayWindow.unifiedHeight
-                        radius: Theme.cornerRadiusSmall
+                        radius: overlayWindow.roundedKeycaps ? Theme.cornerRadiusSmall : 0
                         color: Theme.surfaceContainerHighest
                         border.color: Theme.withAlpha(Theme.outline, 0.25)
                         border.width: 1
