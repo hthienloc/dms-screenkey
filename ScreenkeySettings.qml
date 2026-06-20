@@ -131,10 +131,13 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Layout & Animations")
             icon: "display_settings"
-            showReset: positionSetting.isDirty || animationTypeSetting.isDirty
+            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty
             onResetClicked: {
                 positionSetting.resetToDefault();
                 animationTypeSetting.resetToDefault();
+                charLimitSetting.resetToDefault();
+                textColorSetting.resetToDefault();
+                keycapTextColorSetting.resetToDefault();
             }
         }
 
@@ -167,6 +170,39 @@ print(json.dumps(devs))
             ]
             defaultValue: "none"
         }
+
+        Separator {}
+
+        SliderSettingPlus {
+            id: charLimitSetting
+            settingKey: "charLimit"
+            label: I18n.tr("Normal Typing Limit")
+            description: I18n.tr("Maximum characters buffer shown for normal text")
+            minimum: 5
+            maximum: 50
+            defaultValue: 20
+            unit: "chars"
+            leftLabel: "5"
+            rightLabel: "50"
+        }
+
+        Separator {}
+
+        ColorSettingPlus {
+            id: textColorSetting
+            settingKey: "textColor"
+            label: I18n.tr("Normal Text Color")
+            defaultValue: "primary"
+        }
+
+        Separator {}
+
+        ColorSettingPlus {
+            id: keycapTextColorSetting
+            settingKey: "keycapTextColor"
+            label: I18n.tr("Keycap & Mouse Color")
+            defaultValue: "primary"
+        }
     }
 
     SettingsCard {
@@ -174,12 +210,23 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Visibility Options")
             icon: "visibility"
-            showReset: showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
+            showReset: showShortcutsSetting.isDirty || showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
             onResetClicked: {
+                showShortcutsSetting.resetToDefault();
                 showNormalKeysSetting.resetToDefault();
                 showMouseClicksSetting.resetToDefault();
             }
         }
+
+        ToggleSettingPlus {
+            id: showShortcutsSetting
+            settingKey: "showShortcuts"
+            label: I18n.tr("Show Key Combinations")
+            description: I18n.tr("Toggle to display modifier shortcuts (e.g., Ctrl + Alt + T)")
+            defaultValue: true
+        }
+
+        Separator {}
 
         ToggleSettingPlus {
             id: showNormalKeysSetting

@@ -22,6 +22,10 @@ PluginComponent {
     readonly property string selectedDevicePath: root.pluginData.selectedDevicePath ?? "all"
     readonly property bool showMouseClicks: root.pluginData.showMouseClicks ?? false
     readonly property string animationType: root.pluginData.animationType ?? "none"
+    readonly property bool showShortcuts: root.pluginData.showShortcuts ?? true
+    readonly property string textColor: root.pluginData.textColor ?? "primary"
+    readonly property string keycapTextColor: root.pluginData.keycapTextColor ?? "primary"
+    readonly property int charLimit: root.pluginData.charLimit ?? 20
 
     // Output state
     property string displayText: ""
@@ -112,17 +116,19 @@ PluginComponent {
         // 2. Active modifiers combo logic
         const hasModifiers = root.ctrlActive || root.altActive || root.superActive;
         if (hasModifiers) {
-            fadeTimer.stop();
-            let combo = [];
-            if (root.ctrlActive) combo.push("Ctrl");
-            if (root.altActive) combo.push("Alt");
-            if (root.shiftActive) combo.push("Shift");
-            if (root.superActive) combo.push("Super");
-            combo.push(KeyMapper.getDisplayKey(keyName));
+            if (root.showShortcuts) {
+                fadeTimer.stop();
+                let combo = [];
+                if (root.ctrlActive) combo.push("Ctrl");
+                if (root.altActive) combo.push("Alt");
+                if (root.shiftActive) combo.push("Shift");
+                if (root.superActive) combo.push("Super");
+                combo.push(KeyMapper.getDisplayKey(keyName));
 
-            root.textBuffer = ""; // Reset standard typing buffer
-            root.displayText = combo.join(" + ");
-            fadeTimer.start();
+                root.textBuffer = ""; // Reset standard typing buffer
+                root.displayText = combo.join(" + ");
+                fadeTimer.start();
+            }
             return;
         }
 
@@ -132,6 +138,9 @@ PluginComponent {
             if (keyChar !== "") {
                 fadeTimer.stop();
                 root.textBuffer += keyChar;
+                if (root.textBuffer.length > root.charLimit) {
+                    root.textBuffer = root.textBuffer.slice(-root.charLimit);
+                }
                 root.displayText = root.textBuffer;
                 fadeTimer.start();
                 return;

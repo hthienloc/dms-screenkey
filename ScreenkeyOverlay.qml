@@ -41,6 +41,8 @@ PanelWindow {
     }
 
     readonly property real unifiedHeight: dummyText.implicitHeight + Theme.spacingXS * 2
+    readonly property color resolvedTextColor: daemon ? (daemon.textColor === "primary" ? Theme.primary : Qt.color(daemon.textColor)) : Theme.primary
+    readonly property color resolvedKeycapTextColor: daemon ? (daemon.keycapTextColor === "primary" ? Theme.primary : Qt.color(daemon.keycapTextColor)) : Theme.primary
 
     // Match window size to container size
     implicitWidth: isCentered ? (screen ? screen.width : 1920) : cardContainer.width
@@ -129,7 +131,7 @@ PanelWindow {
                             anchors.centerIn: parent
                             font.pixelSize: daemon ? daemon.fontSize : 24
                             font.bold: true
-                            color: Theme.primary
+                            color: overlayWindow.resolvedKeycapTextColor
                             text: modelData
                         }
                     }
@@ -207,7 +209,7 @@ PanelWindow {
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: daemon ? daemon.fontSize : 24
                     font.bold: true
-                    color: Theme.primary
+                    color: overlayWindow.resolvedKeycapTextColor
                     text: mouseIcon.isLeft ? "L" : (mouseIcon.isRight ? "R" : "M")
                 }
             }
@@ -218,7 +220,7 @@ PanelWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: daemon ? daemon.fontSize : 24
                 font.bold: true
-                color: Theme.primary
+                color: overlayWindow.resolvedTextColor
                 text: daemon ? daemon.displayText : ""
                 
                 // Force height matching keycaps to avoid container height jump
