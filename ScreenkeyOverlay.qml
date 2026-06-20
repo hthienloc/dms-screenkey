@@ -9,6 +9,7 @@ PanelWindow {
 
     property var daemon: null
     readonly property bool isCentered: daemon ? (daemon.position === "bottom_center" || daemon.position === "top_center") : false
+    readonly property bool isMouseClick: daemon ? (daemon.displayText === "LMB Click" || daemon.displayText === "RMB Click" || daemon.displayText === "MMB Click") : false
 
     // Dynamic positioning based on settings (e.g. "bottom_center", "top_left", etc.)
     anchors.bottom: daemon ? daemon.position.includes("bottom") : false
@@ -121,9 +122,75 @@ PanelWindow {
                 }
             }
 
+            // Render mouse click indicator
+            Row {
+                id: mouseIcon
+                visible: overlayWindow.isMouseClick
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: Theme.spacingS
+                height: overlayWindow.unifiedHeight
+
+                readonly property bool isLeft: daemon ? daemon.displayText === "LMB Click" : false
+                readonly property bool isRight: daemon ? daemon.displayText === "RMB Click" : false
+                readonly property bool isMiddle: daemon ? daemon.displayText === "MMB Click" : false
+
+                Rectangle {
+                    width: 14
+                    height: 22
+                    radius: 7
+                    color: "transparent"
+                    border.color: Theme.outline
+                    border.width: 1.5
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    // Left click indicator
+                    Rectangle {
+                        width: 7
+                        height: 11
+                        radius: 3
+                        color: mouseIcon.isLeft ? Theme.primary : "transparent"
+                        border.color: Theme.outline
+                        border.width: 1
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                    }
+
+                    // Right click indicator
+                    Rectangle {
+                        width: 7
+                        height: 11
+                        radius: 3
+                        color: mouseIcon.isRight ? Theme.primary : "transparent"
+                        border.color: Theme.outline
+                        border.width: 1
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                    }
+
+                    // Scroll wheel (middle button)
+                    Rectangle {
+                        width: 2
+                        height: 5
+                        radius: 1
+                        color: mouseIcon.isMiddle ? Theme.primary : Theme.outline
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        anchors.topMargin: 3
+                    }
+                }
+
+                StyledText {
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: daemon ? daemon.fontSize : 24
+                    font.bold: true
+                    color: Theme.primary
+                    text: mouseIcon.isLeft ? "L" : (mouseIcon.isRight ? "R" : "M")
+                }
+            }
+
             // Render standard text for normal typing
             StyledText {
-                visible: !contentRow.isCombo
+                visible: !contentRow.isCombo && !overlayWindow.isMouseClick
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: daemon ? daemon.fontSize : 24
                 font.bold: true
