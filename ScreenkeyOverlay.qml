@@ -30,6 +30,17 @@ PanelWindow {
         bottom: 24
     }
 
+    // Dummy text to calculate a unified height based on current font size
+    StyledText {
+        id: dummyText
+        visible: false
+        font.pixelSize: daemon ? daemon.fontSize : 24
+        font.bold: true
+        text: "A"
+    }
+
+    readonly property real unifiedHeight: dummyText.implicitHeight + Theme.spacingXS * 2
+
     // Match window size to container size
     implicitWidth: isCentered ? (screen ? screen.width : 1920) : cardContainer.width
     implicitHeight: cardContainer.height
@@ -82,7 +93,7 @@ PanelWindow {
                     StyledRect {
                         anchors.verticalCenter: parent.verticalCenter
                         width: keycapText.implicitWidth + Theme.spacingM * 2
-                        height: keycapText.implicitHeight + Theme.spacingXS * 2
+                        height: overlayWindow.unifiedHeight
                         radius: Theme.cornerRadiusSmall
                         color: Theme.surfaceContainerHighest
                         border.color: Theme.withAlpha(Theme.outline, 0.25)
@@ -118,6 +129,10 @@ PanelWindow {
                 font.bold: true
                 color: Theme.primary
                 text: daemon ? daemon.displayText : ""
+                
+                // Force implicit height matching keycaps to avoid container height jump
+                implicitHeight: overlayWindow.unifiedHeight
+                verticalAlignment: Text.AlignVCenter
             }
         }
     }
