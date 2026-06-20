@@ -1,6 +1,6 @@
 {
     "id": "screenkey",
-    "name": "Keystroke Visualizer",
+    "name": "Screenkey",
     "description": "Displays keystrokes on screen in a readable format for tutorials",
     "version": "1.0.1",
     "author": "Loc Huynh",
