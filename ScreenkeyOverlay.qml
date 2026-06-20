@@ -292,7 +292,7 @@ PanelWindow {
                         anchors.centerIn: parent
                         font.pixelSize: daemon ? daemon.fontSize - 4 : 20
                         font.bold: true
-                        color: Theme.onPrimaryContainer
+                        color: Theme.onPrimary
                         text: overlayWindow.getOverlayKeyText("Ctrl")
                     }
                 }
@@ -312,7 +312,7 @@ PanelWindow {
                         anchors.centerIn: parent
                         font.pixelSize: daemon ? daemon.fontSize - 4 : 20
                         font.bold: true
-                        color: Theme.onPrimaryContainer
+                        color: Theme.onPrimary
                         text: overlayWindow.getOverlayKeyText("Alt")
                     }
                 }
@@ -332,7 +332,7 @@ PanelWindow {
                         anchors.centerIn: parent
                         font.pixelSize: daemon ? daemon.fontSize - 4 : 20
                         font.bold: true
-                        color: Theme.onPrimaryContainer
+                        color: Theme.onPrimary
                         text: overlayWindow.getOverlayKeyText("Shift")
                     }
                 }
@@ -352,7 +352,7 @@ PanelWindow {
                         anchors.centerIn: parent
                         font.pixelSize: daemon ? daemon.fontSize - 4 : 20
                         font.bold: true
-                        color: Theme.onPrimaryContainer
+                        color: Theme.onPrimary
                         text: overlayWindow.getOverlayKeyText("Super")
                     }
                 }
