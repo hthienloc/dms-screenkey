@@ -1,0 +1,21 @@
+{
+    "id": "screenkey",
+    "name": "Keystroke Visualizer",
+    "description": "Displays keystrokes on screen in a readable format for tutorials",
+    "version": "1.0.0",
+    "author": "Loc Huynh",
+    "type": "widget",
+    "icon": "keyboard",
+    "capabilities": [
+        "control-center",
+        "dankbar-widget"
+    ],
+    "component": "./ScreenkeyWidget.qml",
+    "settings": "./ScreenkeySettings.qml",
+    "requires_dms": ">=1.5.0",
+    "permissions": [
+        "settings_read",
+        "settings_write",
+        "shell_execute"
+    ]
+}
