@@ -7,14 +7,14 @@ import qs.Widgets
 PanelWindow {
     id: overlayWindow
 
-    readonly property var daemon: parent
-    readonly property bool isCentered: daemon.position === "bottom_center" || daemon.position === "top_center"
+    property var daemon: null
+    readonly property bool isCentered: daemon ? (daemon.position === "bottom_center" || daemon.position === "top_center") : false
 
     // Dynamic positioning based on settings (e.g. "bottom_center", "top_left", etc.)
-    anchors.bottom: daemon.position.includes("bottom")
-    anchors.top: daemon.position.includes("top")
-    anchors.left: isCentered || daemon.position.includes("left")
-    anchors.right: isCentered || daemon.position.includes("right")
+    anchors.bottom: daemon ? daemon.position.includes("bottom") : false
+    anchors.top: daemon ? daemon.position.includes("top") : false
+    anchors.left: isCentered || (daemon ? daemon.position.includes("left") : false)
+    anchors.right: isCentered || (daemon ? daemon.position.includes("right") : false)
 
     // Wayland specific window properties
     WlrLayershell.layer: WlrLayershell.Overlay
@@ -29,8 +29,8 @@ PanelWindow {
     }
 
     // Match window size to container size
-    width: isCentered ? (screen ? screen.width : 1920) : cardContainer.width
-    height: cardContainer.height
+    implicitWidth: isCentered ? (screen ? screen.width : 1920) : cardContainer.width
+    implicitHeight: cardContainer.height
     color: "transparent"
 
     StyledRect {
@@ -40,10 +40,10 @@ PanelWindow {
         width: textLabel.implicitWidth + Theme.spacingXL * 2
         height: textLabel.implicitHeight + Theme.spacingL * 2
         
-        anchors.top: daemon.position.includes("top") ? parent.top : undefined
-        anchors.bottom: daemon.position.includes("bottom") ? parent.bottom : undefined
-        anchors.left: daemon.position.includes("left") ? parent.left : undefined
-        anchors.right: daemon.position.includes("right") ? parent.right : undefined
+        anchors.top: (daemon && daemon.position.includes("top")) ? parent.top : undefined
+        anchors.bottom: (daemon && daemon.position.includes("bottom")) ? parent.bottom : undefined
+        anchors.left: (daemon && daemon.position.includes("left")) ? parent.left : undefined
+        anchors.right: (daemon && daemon.position.includes("right")) ? parent.right : undefined
         anchors.horizontalCenter: isCentered ? parent.horizontalCenter : undefined
 
         // Smooth scaling when content changes
@@ -56,8 +56,8 @@ PanelWindow {
         border.width: 1
 
         // Display with fade-in and scale animations
-        opacity: daemon.displayText !== "" ? 1.0 : 0.0
-        scale: daemon.displayText !== "" ? 1.0 : 0.9
+        opacity: (daemon && daemon.displayText !== "") ? 1.0 : 0.0
+        scale: (daemon && daemon.displayText !== "") ? 1.0 : 0.9
         
         Behavior on opacity { OpacityAnimator { duration: 150 } }
         Behavior on scale { NumberAnimation { duration: 150; easing.type: Easing.OutBack } }
@@ -65,10 +65,10 @@ PanelWindow {
         StyledText {
             id: textLabel
             anchors.centerIn: parent
-            font.pixelSize: daemon.fontSize
+            font.pixelSize: daemon ? daemon.fontSize : 24
             font.bold: true
             color: Theme.primary
-            text: daemon.displayText
+            text: daemon ? daemon.displayText : ""
         }
     }
 }

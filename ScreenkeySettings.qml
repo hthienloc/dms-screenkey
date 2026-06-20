@@ -34,7 +34,6 @@ PluginSettings {
         description: qsTr("Inactivity duration (ms) before overlay disappears")
         minimum: 500
         maximum: 5000
-        step: 100
         defaultValue: 1500
     }
 
@@ -44,7 +43,6 @@ PluginSettings {
         description: qsTr("Size of the text on overlay")
         minimum: 16
         maximum: 64
-        step: 1
         defaultValue: 24
     }
 

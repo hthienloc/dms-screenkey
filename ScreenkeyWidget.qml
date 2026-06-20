@@ -250,10 +250,9 @@ PluginComponent {
     // Floating overlay window instance
     ScreenkeyOverlay {
         id: overlay
+        daemon: root
         visible: root.enabled && root.displayText !== ""
     }
-
-
 
     // Control Center Integration
     ccWidgetIcon: "keyboard"
@@ -262,5 +261,14 @@ PluginComponent {
     ccWidgetIsActive: root.enabled
     onCcWidgetToggled: {
         root.saveSetting("enabled", !root.enabled);
+    }
+
+    function saveSetting(key, value) {
+        try {
+            pluginService.savePluginData(pluginId, key, value);
+            if (pluginData) pluginData[key] = value;
+        } catch(e) {
+            console.warn("[Screenkey] Failed to save setting:", key, e);
+        }
     }
 }
