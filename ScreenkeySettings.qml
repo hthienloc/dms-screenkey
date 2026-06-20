@@ -131,11 +131,12 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Layout & Animations")
             icon: "display_settings"
-            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || roundedKeycapsSetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty
+            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || roundedKeycapsSetting.isDirty || overlayOpacitySetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty
             onResetClicked: {
                 positionSetting.resetToDefault();
                 animationTypeSetting.resetToDefault();
                 roundedKeycapsSetting.resetToDefault();
+                overlayOpacitySetting.resetToDefault();
                 charLimitSetting.resetToDefault();
                 textColorSetting.resetToDefault();
                 keycapTextColorSetting.resetToDefault();
@@ -180,6 +181,21 @@ print(json.dumps(devs))
             label: I18n.tr("Rounded Keycap Corners")
             description: I18n.tr("Toggle between rounded or sharp square keycap corners")
             defaultValue: true
+        }
+
+        Separator {}
+
+        SliderSettingPlus {
+            id: overlayOpacitySetting
+            settingKey: "overlayOpacity"
+            label: I18n.tr("Overlay Opacity")
+            description: I18n.tr("Adjust the transparency of the overlay visualizer")
+            minimum: 10
+            maximum: 100
+            defaultValue: 90
+            unit: "%"
+            leftLabel: "10%"
+            rightLabel: "100%"
         }
 
         Separator {}

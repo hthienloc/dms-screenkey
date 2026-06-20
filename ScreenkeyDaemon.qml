@@ -29,6 +29,7 @@ PluginComponent {
     readonly property string keycapTextColorCustom: root.pluginData.keycapTextColorCustom ?? "#6750A4"
     readonly property int charLimit: root.pluginData.charLimit ?? 20
     readonly property bool roundedKeycaps: root.pluginData.roundedKeycaps ?? true
+    readonly property int overlayOpacity: root.pluginData.overlayOpacity ?? 90
 
     // Output state
     property string displayText: ""

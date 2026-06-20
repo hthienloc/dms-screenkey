@@ -79,7 +79,7 @@ PanelWindow {
         border.width: 1
 
         // Display with dynamic animations based on settings
-        opacity: (daemon && daemon.displayText !== "") ? 1.0 : 0.0
+        opacity: (daemon && daemon.displayText !== "") ? (daemon.overlayOpacity / 100.0) : 0.0
         scale: (daemon && daemon.displayText !== "") ? 1.0 : (daemon && daemon.animationType === "zoom" ? 0.9 : 1.0)
 
         property real yOffset: {
