@@ -52,7 +52,7 @@ PanelWindow {
         Behavior on width { NumberAnimation { duration: 100 } }
         Behavior on height { NumberAnimation { duration: 100 } }
 
-        radius: Theme.cornerRadiusLarge
+        radius: Theme.cornerRadius
         color: Theme.withAlpha(Theme.surface, 0.85) // Elegant glassmorphism
         border.color: Theme.withAlpha(Theme.outline, 0.15)
         border.width: 1
