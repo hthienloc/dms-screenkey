@@ -215,15 +215,11 @@ PluginComponent {
                     }
                 } else if (root.showMouseClicks && data.includes("POINTER_BUTTON")) {
                     if (data.includes("pressed")) {
-                        const btnMatch = data.match(/button\s+(\d+)/);
-                        if (btnMatch) {
-                            const btnCode = parseInt(btnMatch[1]);
-                            let btnName = "Mouse Click";
-                            if (btnCode === 272) btnName = "LMB Click";
-                            else if (btnCode === 273) btnName = "RMB Click";
-                            else if (btnCode === 274) btnName = "MMB Click";
-                            root.handleMouseClick(btnName);
-                        }
+                        let btnName = "Mouse Click";
+                        if (data.includes("BTN_LEFT") || data.includes("(272)")) btnName = "LMB Click";
+                        else if (data.includes("BTN_RIGHT") || data.includes("(273)")) btnName = "RMB Click";
+                        else if (data.includes("BTN_MIDDLE") || data.includes("(274)")) btnName = "MMB Click";
+                        root.handleMouseClick(btnName);
                     }
                 }
             }
