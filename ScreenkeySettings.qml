@@ -131,12 +131,13 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Layout & Animations")
             icon: "display_settings"
-            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || roundedKeycapsSetting.isDirty || overlayOpacitySetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty
+            showReset: positionSetting.isDirty || animationTypeSetting.isDirty || roundedKeycapsSetting.isDirty || overlayOpacitySetting.isDirty || marginSizeSetting.isDirty || charLimitSetting.isDirty || textColorSetting.isDirty || keycapTextColorSetting.isDirty
             onResetClicked: {
                 positionSetting.resetToDefault();
                 animationTypeSetting.resetToDefault();
                 roundedKeycapsSetting.resetToDefault();
                 overlayOpacitySetting.resetToDefault();
+                marginSizeSetting.resetToDefault();
                 charLimitSetting.resetToDefault();
                 textColorSetting.resetToDefault();
                 keycapTextColorSetting.resetToDefault();
@@ -201,6 +202,21 @@ print(json.dumps(devs))
         Separator {}
 
         SliderSettingPlus {
+            id: marginSizeSetting
+            settingKey: "marginSize"
+            label: I18n.tr("Screen Margin")
+            description: I18n.tr("Adjust the distance of the overlay from screen edges")
+            minimum: 0
+            maximum: 100
+            defaultValue: 24
+            unit: "px"
+            leftLabel: "0px"
+            rightLabel: "100px"
+        }
+
+        Separator {}
+
+        SliderSettingPlus {
             id: charLimitSetting
             settingKey: "charLimit"
             label: I18n.tr("Normal Typing Limit")
@@ -237,9 +253,11 @@ print(json.dumps(devs))
         SectionTitle {
             text: I18n.tr("Visibility Options")
             icon: "visibility"
-            showReset: showShortcutsSetting.isDirty || showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
+            showReset: showShortcutsSetting.isDirty || showOnlyModifiersSetting.isDirty || ignoreFilterKeysSetting.isDirty || showNormalKeysSetting.isDirty || showMouseClicksSetting.isDirty
             onResetClicked: {
                 showShortcutsSetting.resetToDefault();
+                showOnlyModifiersSetting.resetToDefault();
+                ignoreFilterKeysSetting.resetToDefault();
                 showNormalKeysSetting.resetToDefault();
                 showMouseClicksSetting.resetToDefault();
             }
@@ -250,6 +268,26 @@ print(json.dumps(devs))
             settingKey: "showShortcuts"
             label: I18n.tr("Show Key Combinations")
             description: I18n.tr("Toggle to display modifier shortcuts (e.g., Ctrl + Alt + T)")
+            defaultValue: true
+        }
+
+        Separator {}
+
+        ToggleSettingPlus {
+            id: showOnlyModifiersSetting
+            settingKey: "showOnlyModifiers"
+            label: I18n.tr("Show Standalone Modifiers")
+            description: I18n.tr("Toggle to display modifiers like Ctrl or Shift when pressed alone")
+            defaultValue: false
+        }
+
+        Separator {}
+
+        ToggleSettingPlus {
+            id: ignoreFilterKeysSetting
+            settingKey: "ignoreFilterKeys"
+            label: I18n.tr("Ignore Lock Keys")
+            description: I18n.tr("Ignore system lock keys (CapsLock, NumLock, ScrollLock) to avoid noise")
             defaultValue: true
         }
 

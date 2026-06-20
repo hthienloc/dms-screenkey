@@ -30,6 +30,9 @@ PluginComponent {
     readonly property int charLimit: root.pluginData.charLimit ?? 20
     readonly property bool roundedKeycaps: root.pluginData.roundedKeycaps ?? true
     readonly property int overlayOpacity: root.pluginData.overlayOpacity ?? 90
+    readonly property int marginSize: root.pluginData.marginSize ?? 24
+    readonly property bool showOnlyModifiers: root.pluginData.showOnlyModifiers ?? false
+    readonly property bool ignoreFilterKeys: root.pluginData.ignoreFilterKeys ?? true
 
     // Output state
     property string displayText: ""
@@ -96,24 +99,52 @@ PluginComponent {
         }
     }
 
+    function getActiveModifiersString() {
+        let combo = [];
+        if (root.ctrlActive) combo.push("Ctrl");
+        if (root.altActive) combo.push("Alt");
+        if (root.shiftActive) combo.push("Shift");
+        if (root.superActive) combo.push("Super");
+        return combo.join(" + ");
+    }
+
+    function updateModifierDisplay() {
+        if (root.showOnlyModifiers) {
+            fadeTimer.stop();
+            root.textBuffer = "";
+            root.displayText = getActiveModifiersString();
+            fadeTimer.start();
+        }
+    }
+
     function handleKeyPress(keyName) {
         if (!root.enabled) return;
+
+        if (root.ignoreFilterKeys) {
+            if (keyName === "KEY_CAPSLOCK" || keyName === "KEY_NUMLOCK" || keyName === "KEY_SCROLLLOCK") {
+                return;
+            }
+        }
 
         // 1. Modifiers tracking
         if (keyName === "KEY_LEFTCTRL" || keyName === "KEY_RIGHTCTRL") {
             root.ctrlActive = true;
+            updateModifierDisplay();
             return;
         }
         if (keyName === "KEY_LEFTSHIFT" || keyName === "KEY_RIGHTSHIFT") {
             root.shiftActive = true;
+            updateModifierDisplay();
             return;
         }
         if (keyName === "KEY_LEFTALT" || keyName === "KEY_RIGHTALT") {
             root.altActive = true;
+            updateModifierDisplay();
             return;
         }
         if (keyName === "KEY_LEFTMETA" || keyName === "KEY_RIGHTMETA") {
             root.superActive = true;
+            updateModifierDisplay();
             return;
         }
 

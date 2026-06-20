@@ -23,12 +23,11 @@ PanelWindow {
     WlrLayershell.exclusiveZone: -1
     exclusionMode: ExclusionMode.Ignore
 
-    // Add safety margins from screen edges
     WlrLayershell.margins {
-        left: 24
-        right: 24
-        top: 24
-        bottom: 24
+        left: daemon ? daemon.marginSize : 24
+        right: daemon ? daemon.marginSize : 24
+        top: daemon ? daemon.marginSize : 24
+        bottom: daemon ? daemon.marginSize : 24
     }
 
     // Dummy text to calculate a unified height based on current font size
