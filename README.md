@@ -52,7 +52,15 @@ dms ipc screenkey enable
 dms ipc screenkey disable
 ```
 
+## TODO / Roadmap
+
+- [x] **Always-on-top Overlay** - Wayland layer-shell floating overlay.
+- [x] **Dynamic Device Scanner** - Scans active keyboards automatically via helper script.
+- [x] **Vector Mouse Indicators** - Custom QML-drawn mouse with highlighted left, middle, and right buttons.
+- [ ] **Multi-line History** - Display a history of the last few shortcuts on screen.
+- [ ] **Custom Styling** - Add settings to customize keycap colors, border radius, and font family.
+- [ ] **Click Ripple Animation** - Render a visual wave/ripple effect at the cursor coordinates.
+
 ## License
 
 MIT
-
