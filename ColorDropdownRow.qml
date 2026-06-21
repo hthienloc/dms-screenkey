@@ -78,16 +78,22 @@ Column {
     }
 
     SettingsDropdownRow {
+        id: dropdownRow
         text: root.text
         description: root.description
         tab: root.tab
         settingKey: root.settingKey
         tags: root.tags
         options: root.optionLabels()
-        optionColorMap: root.optionColorMap
         currentValue: root.optionLabel(root.currentMode)
         dropdownWidth: root.dropdownWidth
         onValueChanged: value => root.modeSelected(root.optionValue(value))
+
+        Component.onCompleted: {
+            if ("optionColorMap" in dropdownRow) {
+                dropdownRow.optionColorMap = Qt.binding(function() { return root.optionColorMap; });
+            }
+        }
     }
 
     Item {
